@@ -35,7 +35,7 @@ export default class Index extends Component {
         console.log(res.tempFiles);
         const data = await readFile(res.tempFiles[0]);
         if (data) {
-          detectFace();
+          detectFace({ Image: data });
         }
       },
     });

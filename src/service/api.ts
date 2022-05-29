@@ -1,3 +1,3 @@
-import { get } from "./http";
+import { post } from "./http";
 
-export const detectFace = (...args: any[]) => get("/", ...args);
+export const detectFace = (...args: any[]) => post("/iai/detect", ...args);

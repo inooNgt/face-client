@@ -1,6 +1,6 @@
 import { request as wxRequest } from "@tarojs/taro";
 // import { SecretId, SecretKey } from "@/utils/config";
-const BASEURL = `https://iai.tencentcloudapi.com`;
+const BASEURL = `http://127.0.0.1:3000`;
 
 /** HTTP 请求方法 */
 interface Method {
@@ -35,16 +35,6 @@ export function request(url, method: keyof Method = "GET", data?, config?) {
       },
     });
   });
-}
-
-function genHeader() {
-  return {
-    "Content-Type": "application/json; charset=utf-8",
-    "X-TC-Action": "DescribeInstances",
-    "X-TC-Timestamp": Date.now(),
-    "X-TC-Version": "2017-03-12",
-    "X-TC-Region": "ap-guangzhou",
-  };
 }
 
 export function post(url, data?, config?) {
