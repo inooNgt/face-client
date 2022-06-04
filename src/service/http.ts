@@ -1,6 +1,7 @@
 import { request as wxRequest } from "@tarojs/taro";
 // import { SecretId, SecretKey } from "@/utils/config";
-const BASEURL = `http://127.0.0.1:3000`;
+const BASEURL = `http://1.117.24.212:3000`;
+// const BASEURL = `http://127.0.0.1:3000`;
 
 /** HTTP 请求方法 */
 interface Method {

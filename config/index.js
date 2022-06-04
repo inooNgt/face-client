@@ -1,17 +1,18 @@
 import path from "path";
 
 const config = {
-  projectName: "taro-react",
+  projectName: "face-client",
   date: "2022-5-24",
-  designWidth: 750,
+  designWidth: 375,
   deviceRatio: {
     640: 2.34 / 2,
     750: 1,
     828: 1.81 / 2,
+    375: 2 / 1,
   },
   sourceRoot: "src",
   outputRoot: "dist",
-  plugins: [],
+  plugins: ["@tarojs/plugin-html"],
   defineConstants: {},
   copy: {
     patterns: [],
@@ -24,6 +25,7 @@ const config = {
     "@/utils": path.resolve(__dirname, "..", "src/utils"),
   },
   mini: {
+    sourceMapType: "cheap-module-source-map",
     postcss: {
       pxtransform: {
         enable: true,
