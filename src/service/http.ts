@@ -27,8 +27,12 @@ export function request(url, method: keyof Method = "GET", data?, config?) {
       timeout: 60000,
       header,
       success: (res) => {
-        resolve(res?.data);
-        console.log("request success:", res.data);
+        console.log("request success:", res);
+        if (res.statusCode == 200) {
+          resolve(res?.data);
+        } else {
+          reject(res?.data);
+        }
       },
       fail: (err) => {
         reject(err);
