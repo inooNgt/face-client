@@ -5,10 +5,26 @@ import Taro, {
   compressImage,
   getImageInfo,
 } from "@tarojs/taro";
-import { Button } from "@tarojs/components";
+import { Button, Image } from "@tarojs/components";
 import { detectFace } from "@/service/api";
 import { readFile } from "@/utils/index";
 import "./index.scss";
+
+const emotionMap = {
+  "0": "自然",
+  "1": "高兴",
+  "2": "惊讶",
+  "3": "生气",
+  "4": "悲伤",
+  "5": "厌恶",
+  "6": "害怕",
+};
+
+const glassMap = { "0": "无眼镜", "1": "普通眼镜", "2": "墨镜" };
+
+const maskMap = { "0": "无口罩", "1": "有口罩" };
+const noseMap = { "0": "朝天鼻", "1": "鹰钩鼻", "2": "普通", "3": "圆鼻头" };
+const eyelidType = { "0": "单眼皮", "1": "双眼皮" };
 
 interface State {
   file: any;
@@ -118,7 +134,11 @@ export default class Index extends Component<any, State> {
         <view className="face-content">
           {file?.tempFilePath ? (
             <view className="face-box">
-              <img className="face-img" src={file?.tempFilePath}></img>
+              <Image
+                className="face-img"
+                mode="aspectFit"
+                src={file?.tempFilePath}
+              ></Image>
             </view>
           ) : (
             <div className="face-tip">
@@ -143,6 +163,13 @@ export default class Index extends Component<any, State> {
           <view className="result-title">分析结果</view>
           <view>魅力值: {faceInfo.Beauty}</view>
           <view>年龄: {faceInfo.Age}</view>
+          <view>表情: {emotionMap[faceInfo.Emotion?.Type] || ""}</view>
+          <view>微笑: {faceInfo.Smile || ""}</view>
+          <view>鼻子: {noseMap[faceInfo.Nose?.Type] || ""}</view>
+          <view>眼镜: {glassMap[faceInfo.Eye?.Glass?.Type] || ""}</view>
+          <view>眼皮: {eyelidType[faceInfo.Eye?.EyelidType?.Type] || ""}</view>
+          <view>帽子: {faceInfo.Hat?.Style?.Type == 1 ? "有" : "无"}</view>
+          <view>口罩: {faceInfo.Mask?.Type == 1 ? "有口罩" : "无口罩"}</view>
         </view>
       </view>
     );

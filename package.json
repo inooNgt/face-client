@@ -12,6 +12,7 @@
     "build:weapp": "taro build --type weapp",
     "build:h5": "taro build --type h5",
     "dev:weapp": "npm run build:weapp -- --watch",
+    "dev:weapp.preview": "cross-env NODE_ENV=production npm run build:weapp -- --watch",
     "dev:h5": "npm run build:h5 -- --watch"
   },
   "browserslist": [
@@ -40,6 +41,7 @@
     "@typescript-eslint/eslint-plugin": "^5.20.0",
     "@typescript-eslint/parser": "^5.20.0",
     "babel-preset-taro": "3.4.10",
+    "cross-env": "^7.0.3",
     "eslint": "^8.12.0",
     "eslint-config-taro": "3.4.10",
     "eslint-plugin-import": "^2.12.0",
