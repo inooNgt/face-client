@@ -6,43 +6,45 @@ import Taro, {
   getImageInfo,
 } from "@tarojs/taro";
 import { Button, Image } from "@tarojs/components";
-import { detectFace } from "@/service/api";
+import { getStockIndex, getStockWeight } from "@/service/akt";
 import { readFile } from "@/utils/index";
 import "./index.scss";
 
-const emotionMap = {
-  "0": "自然",
-  "1": "高兴",
-  "2": "惊讶",
-  "3": "生气",
-  "4": "悲伤",
-  "5": "厌恶",
-  "6": "害怕",
-};
-
-const glassMap = { "0": "无眼镜", "1": "普通眼镜", "2": "墨镜" };
-
-const maskMap = { "0": "无口罩", "1": "有口罩" };
-const noseMap = { "0": "朝天鼻", "1": "鹰钩鼻", "2": "普通", "3": "圆鼻头" };
-const eyelidType = { "0": "单眼皮", "1": "双眼皮" };
-
 interface State {
   file: any;
-  faceInfo: any;
+  stockList: any[];
+  columns: any[];
 }
 
 export default class Index extends Component<any, State> {
   constructor(props) {
     super(props);
     this.handleClick = this.handleClick.bind(this);
+    this.getStockInfo = this.getStockInfo.bind(this);
     this.state = {
       file: null,
-      faceInfo: {},
+      stockList: [],
+      columns: [
+        { title: "指数名称", key: "" },
+        { title: "最新价", key: "" },
+        { title: "涨跌幅", key: "" },
+      ],
     };
   }
   componentWillMount() {}
 
-  componentDidMount() {}
+  componentDidMount() {
+    getStockIndex()
+      .then((res: any) => {
+        console.log("getStockIndex", res);
+        this.setState({
+          stockList: res,
+        });
+      })
+      .catch((err) => {
+        console.log("err", err);
+      });
+  }
 
   componentWillUnmount() {}
 
@@ -50,128 +52,44 @@ export default class Index extends Component<any, State> {
 
   componentDidHide() {}
 
-  handleClick() {
-    this.chooseImage();
-  }
+  handleClick() {}
 
-  chooseImage() {
-    chooseMedia({
-      count: 1,
-      mediaType: ["image"],
-      sourceType: ["album", "camera"],
-      maxDuration: 30,
-      camera: "back",
-      success: async (res: Taro.chooseMedia.SuccessCallbackResult) => {
-        let file = res.tempFiles[0];
-        console.log("tempFiles", res.tempFiles);
-        if (file) {
-          this.setState({
-            file: file,
-          });
-          if (file.size > 1 * 1024 * 1024) {
-            this.compressImage(file).then((compressFile) => {
-              this.postImg(compressFile);
-            });
-          } else {
-            this.postImg(file);
-          }
-        }
-      },
-    });
-  }
-
-  async postImg(file) {
-    const data = await readFile(file);
-
-    if (data) {
-      detectFace({ Image: data })
-        .then((res: any) => {
-          console.log("detectFace", res);
-          if (res?.FaceDetailInfos?.[0]) {
-            this.setState({
-              faceInfo: res.FaceDetailInfos[0].FaceDetailAttributesInfo,
-            });
-          }
-        })
-        .catch((e) => {
-          showToast({
-            title: e.message || "上传失败",
-            icon: "error",
-          });
-        });
-    }
-  }
-
-  compressImage(file) {
-    let quality = ~~((50 * 1024 * 100) / file.size);
-    return new Promise((resolve, reject) => {
-      compressImage({
-        src: file.tempFilePath, // 图片路径
-        quality, // 压缩质量
-        success: (res) => {
-          resolve(res);
-          this.setState({ file: res });
-          console.log("compressImage", res, quality);
-          getImageInfo({
-            src: res.tempFilePath,
-            success(res) {
-              console.log("getImageInfo", res);
-            },
-          });
-        },
-        fail: (err) => {
-          reject(err);
-          console.log("compressImage", err);
-        },
+  getStockInfo(item: any) {
+    console.log("getinfo:", item);
+    getStockWeight(item["代码"].replace?.(/(sh|sz)/g, ""))
+      .then((res) => {
+        console.log("getStockWeight", res);
+      })
+      .catch((e) => {
+        console.log("err", e);
       });
-    });
   }
+
   render() {
-    const { faceInfo, file } = this.state;
-    console.log("faceInfo", faceInfo);
+    let { stockList, columns } = this.state;
     return (
-      <view className="page-index">
-        <view className="face-content">
-          {file?.tempFilePath ? (
-            <view className="face-box">
-              <Image
-                className="face-img"
-                mode="aspectFit"
-                src={file?.tempFilePath}
-              ></Image>
-            </view>
-          ) : (
-            <div className="face-tip">
-              <p className="tip">
-                上传一张完整的面部照片，AI智能测颜值评分系统就会根据国人的审美为你进行在线打分。除了颜值之外，测试结果还包含性别、年龄、面部表情等信息。
-              </p>
-              <i className="iconfont icon-face"></i>
+      <div className="page-stock table">
+        <div className="table-head">
+          {columns.map((item) => (
+            <span className="table-cell" key={item.title}>
+              {item.title}
+            </span>
+          ))}
+        </div>
+        <div className="table-body">
+          {stockList.map((item, index) => (
+            <div
+              className="table-row"
+              key={index}
+              onClick={() => this.getStockInfo(item)}
+            >
+              <span className="table-cell stock-name">{item["名称"]}</span>
+              <span className="table-cell stock-info">{item["最新价"]}</span>
+              <span className="table-cell stock-info">{item["涨跌幅"]}%</span>
             </div>
-          )}
-        </view>
-        <view className="row-btn">
-          <Button
-            className="btn-upload"
-            type="primary"
-            onClick={this.handleClick}
-          >
-            <i className="iconfont icon-paizhao"></i>
-            <text>选择照片</text>
-          </Button>
-        </view>
-        <view className="result">
-          <view className="result-title">分析结果</view>
-          <view>魅力值: {faceInfo.Beauty}</view>
-          <view>年龄: {faceInfo.Age}</view>
-          <view>表情: {emotionMap[faceInfo.Emotion?.Type] || ""}</view>
-          <view>微笑: {faceInfo.Smile || ""}</view>
-          <view>鼻子: {noseMap[faceInfo.Nose?.Type] || ""}</view>
-          <view>眼镜: {glassMap[faceInfo.Eye?.Glass?.Type] || ""}</view>
-          <view>眼皮: {eyelidType[faceInfo.Eye?.EyelidType?.Type] || ""}</view>
-          <view>帽子: {faceInfo.Hat?.Style?.Type == 1 ? "有" : "无"}</view>
-          <view>口罩: {faceInfo.Mask?.Type == 1 ? "有口罩" : "无口罩"}</view>
-        </view>
-      </view>
+          ))}
+        </div>
+      </div>
     );
   }
 }

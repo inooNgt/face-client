@@ -2,7 +2,9 @@ import { Component } from "react";
 import "./assets/style/index.scss";
 
 class App extends Component {
-  componentDidMount() {}
+  componentDidMount() {
+    console.log("app did mount env:", process.env.CONFIG);
+  }
 
   componentDidShow() {}
 

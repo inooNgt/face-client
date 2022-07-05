@@ -1,0 +1,63 @@
+.page-index {
+  padding: 0 16px;
+  .icon-paizhao {
+    color: #fff;
+  }
+  .row-btn {
+    text-align: center;
+  }
+  .icon-paizhao {
+    margin-right: 4px;
+  }
+  .btn-upload {
+    display: inline-flex;
+    align-items: center;
+    color: #fff;
+    padding: 6px 10px;
+  }
+
+  .face-box {
+    width: 300px;
+    height: 300px;
+    margin: 20px auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    .face-img {
+      width: 300px;
+      height: 300px;
+      object-fit: cover;
+    }
+  }
+  .face-tip {
+    width: 300px;
+    min-height: 200px;
+    margin: 20px auto;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    padding: 12px;
+    text-align: center;
+    .tip {
+      text-align: left;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+    .icon-face {
+      margin: 30px 0;
+      font-size: 48px;
+      color: #999;
+    }
+  }
+  .result {
+    padding: 12px;
+    view {
+      line-height: 28px;
+    }
+  }
+  .result-title {
+    font-size: 16px;
+    font-weight: 600;
+  }
+}

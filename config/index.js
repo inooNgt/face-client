@@ -62,6 +62,9 @@ const config = {
         },
       },
     },
+    devServer: {
+      port: 8001,
+    },
   },
 };
 
