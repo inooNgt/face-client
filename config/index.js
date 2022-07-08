@@ -23,6 +23,7 @@ const config = {
     "@/components": path.resolve(__dirname, "..", "src/components"),
     "@/service": path.resolve(__dirname, "..", "src/service"),
     "@/utils": path.resolve(__dirname, "..", "src/utils"),
+    "@/router": path.resolve(__dirname, "..", "src/router"),
   },
   mini: {
     sourceMapType: "cheap-module-source-map",
@@ -63,7 +64,7 @@ const config = {
       },
     },
     devServer: {
-      port: 8001,
+      port: 7001,
     },
   },
 };

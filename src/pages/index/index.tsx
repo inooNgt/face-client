@@ -9,6 +9,7 @@ import { Button, Image } from "@tarojs/components";
 import { getStockIndex, getStockWeight } from "@/service/akt";
 import { readFile } from "@/utils/index";
 import "./index.scss";
+import router from "@/router/fn";
 
 interface State {
   file: any;
@@ -56,13 +57,12 @@ export default class Index extends Component<any, State> {
 
   getStockInfo(item: any) {
     console.log("getinfo:", item);
-    getStockWeight(item["代码"].replace?.(/(sh|sz)/g, ""))
-      .then((res) => {
-        console.log("getStockWeight", res);
-      })
-      .catch((e) => {
-        console.log("err", e);
-      });
+    router.push({
+      name: "stock-detail",
+      params: {
+        code: item["代码"].replace?.(/(sh|sz)/g, ""),
+      },
+    });
   }
 
   render() {

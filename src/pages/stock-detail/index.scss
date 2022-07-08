@@ -1,0 +1,23 @@
+.page-stock {
+  padding: 16px;
+  font-size: 14px;
+  .stock-name {
+  }
+  .stock-info {
+  }
+}
+.table {
+  text-align: left;
+  .table-head {
+    font-weight: 600;
+    display: flex;
+    justify-content: space-around;
+  }
+  .table-row {
+    display: flex;
+    justify-content: space-around;
+  }
+  .table-cell {
+    flex: 1;
+  }
+}

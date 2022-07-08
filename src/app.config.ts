@@ -1,5 +1,7 @@
+import { routes } from "./router/index";
+const pages = routes.map((route) => route.path);
 export default defineAppConfig({
-  pages: ["pages/index/index"],
+  pages,
   window: {
     backgroundTextStyle: "light",
     navigationBarBackgroundColor: "#fff",
